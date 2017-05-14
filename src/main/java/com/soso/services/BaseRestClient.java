@@ -1,5 +1,6 @@
 package com.soso.services;
 
+import com.soso.config.AppModeResolver;
 import com.soso.dto.ServiceInfoDto;
 import com.soso.utilities.JsonConverter;
 import org.springframework.web.client.RestTemplate;
@@ -15,7 +16,9 @@ public class BaseRestClient {
     private ServiceInfoDto destinationService;
 
 
-    public BaseRestClient(@NotNull Integer serviceId){
+
+
+    protected BaseRestClient(@NotNull Integer serviceId){
         restTemplate = new RestTemplate();
         initializeBaseUrl(serviceId);
     }
@@ -39,7 +42,7 @@ public class BaseRestClient {
 
 
     private class ServicesDetailService {
-        private String baseServicesDetailServiceUrl = "https://pure-badlands-72083.herokuapp.com/";
+        private String baseServicesDetailServiceUrl = new AppModeResolver().isLocalMode() ? "http://localhost:9011": "https://pure-badlands-72083.herokuapp.com/";
 
         private String getInfoByServiceId(Integer serviceId){
             return restTemplate.getForObject(baseServicesDetailServiceUrl + "serviceDetails/" + serviceId,String.class);
